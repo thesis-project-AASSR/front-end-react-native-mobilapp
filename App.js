@@ -7,7 +7,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {console.log("hii")}
-      <Text>hello worlddduuuuu!</Text>
+      {/* <Text>hello worlddduuuuu!</Text> */}
       
       <Profile/>
       
