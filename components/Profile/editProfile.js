@@ -10,7 +10,7 @@ console.log(props.route.params.id)
     console.log(editProfile);
         const onSubmit =  ( (e) => {
           e.preventDefault();
-        axios.put(`http://http://192.168.8.103:5000/UsersUpdate/`+ props.route.params.id, editProfile)
+        axios.put(`http://192.168.1.14:5000/UsersUpdate/`+ props.route.params.id, editProfile)
         // console.log(editProfile);
         .then(res => {
             console.log(res);

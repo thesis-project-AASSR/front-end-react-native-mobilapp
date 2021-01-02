@@ -7,8 +7,8 @@ import Signup from './components/Authentication/signup';
 import Notification from './components/notifications/notifications';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
-import firebase from './components/List items/firbase';
-import { storage } from './components/List items/firbase';
+
+
 import {AsyncStorage} from '@react-native-community/async-storage'
 import profile from './components/Profile/profile';
 import EditProfile from './components/Profile/editProfile';
@@ -19,6 +19,10 @@ import login from './components/Authentication/login';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
+import Edit from './components/List items/editItem'
+import LocationSearchModal from './components/map'
+import main from './components/chat/Main'
+import chat from './components/chat/Chat'
 // import { StatusBar } from 'expo-status-bar';
 
 function HomeScreen({ navigation }) {
@@ -94,11 +98,19 @@ export default function App() {
       <Drawer.Screen name="Profile" component={profile}/>
       <Drawer.Screen name="Add new item" component={addItems}/> 
       <Drawer.Screen name="All Items" component={items}/> 
+      <Drawer.Screen name="Edit" component={Edit} />
+      <Drawer.Screen name="MapScreen" component={LocationSearchModal} />
+      <Drawer.Screen name="Main" component={main} />
+      <Drawer.Screen name="Chat" component={chat} />
       {/* ) */}
       {/* : ( */}
       <Drawer.Screen name="Sign Up" component={signup} />
       <Drawer.Screen name="Sign In" component={login} />
        <Drawer.Screen name="update profile" component={EditProfile}/> 
+      
+      
+     
+     
       {/* ) */}
       {/* } */}
     </Drawer.Navigator>

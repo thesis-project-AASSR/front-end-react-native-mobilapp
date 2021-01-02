@@ -12,7 +12,7 @@ const [savedUserData, setSavedUserData] = useState({ email: '', password: ''});
  
 //LOGIN button function
 const clickHandler = async (req) => {
-   axios.post('http://192.168.8.103:5000/signin', savedUserData) //connected to the server port
+   axios.post('http://192.168.1.14:5000/signin', savedUserData) //connected to the server port
    .then(async req =>{
     //  console.log(req.data)
      const token = req.data.token

@@ -16,7 +16,7 @@ console.log(profile)
 //filter the array of objects to user id
 //map over the user's object and render it's data
 useEffect(() => {
-    axios.get('http://192.168.8.103:5000/UserProfile')
+    axios.get('http://192.168.1.14:5000/UserProfile')
     .then(async res => {
               
        try{

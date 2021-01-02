@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, ImageBackground, Button, TextInput, Image} from 'react-native';
 import {useState} from 'react';
-import * as firebase from 'firebase';
+
 import {launchImageLibraryAsync} from 'react-native-image-picker';
 import { storage} from '../List items/firbase';
 // import firebase from '../List items/firbase';
@@ -56,7 +56,7 @@ const onChooseImagePress = async () => {
 
 const clickHandler = () => {
    
-    axios.post('http://192.168.8.103:5000/signup', userData) //connected to the server port
+    axios.post('http://192.168.1.14:5000/signup', userData) //connected to the server port
     .then( req=> {
      console.log(req.data)
     //  localStorage.setItem('token', req.data.token)
