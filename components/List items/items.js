@@ -1,17 +1,44 @@
 import React, { useEffect , useState } from 'react';
-import {View, Text, ImageBackground,Image,StyleSheet} from 'react-native';
-
+import {View, Text, ImageBackground,Image,StyleSheet,Button, useWindowDimensions} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import  axios from 'axios';
-const Items = () => {
+const Items = (props) => {
+  console.log(props)
 // const {name,tagline,image} = props;
 const [items, setItems] = useState('');
-// const list =items.map((item)=>{
-//     <Text>{item.category} </Text> })
-console.log(items)
+localStorage.setItem('userid',11)
+localStorage.setItem('location','amman')
+
+const Delete = (ID) => {
+  
+  axios.delete("http://127.0.0.1:5000/delete/"+ID).then( res => {
+   console.log(res.data) 
+   })
+  .catch((error) => {
+    console.log(error);
+})
+    props.navigation.navigate('items')
+}
+
 
 useEffect( () => {
     
     axios.get('http://192.168.1.13:5000/ItemsList')   
+    .then( res => {
+        // console.log (res.data)
+        setItems(res.data)
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+   
+  }, []);
+
+
+//getting all the items 
+useEffect(  () => {
+      axios.get('http://127.0.0.1:5000/ItemsList')   
     .then( res => {
         // console.log (res.data)
         setItems(res.data)
@@ -54,6 +81,26 @@ useEffect( () => {
             <Text> description: {v.description}</Text>
            
            
+            <Button
+        title="Go to add items"
+        onPress={() => props.navigation.navigate('addItems')}
+      />
+      <Button
+        title="Edit"
+        onPress={() => props.navigation.navigate('Edit', {itemID:v.itemID ,image :v.image,category :v.category,
+          quantity :v.quantity,weight:v.weight,description:v.description, price:v.price,user_id:v.user_id,
+          status:v.status , location: v.location,
+
+
+        })}
+      />
+              <Button
+        title="Delete"
+        onPress={() => {Delete(v.itemID)}}
+      />
+              
+              
+
             </Text>
           
             
