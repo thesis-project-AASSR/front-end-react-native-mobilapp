@@ -22,6 +22,18 @@ const Delete = (ID) => {
 }
 
 
+useEffect( () => {
+    
+    axios.get('http://192.168.1.13:5000/ItemsList')   
+    .then( res => {
+        // console.log (res.data)
+        setItems(res.data)
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+   
+  }, []);
 
 
 //getting all the items 

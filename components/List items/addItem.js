@@ -126,7 +126,3 @@ const addItems = () =>{
 }
 
 export default AddItem;
-
-
-
-
