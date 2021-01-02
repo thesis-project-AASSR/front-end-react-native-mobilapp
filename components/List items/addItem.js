@@ -4,6 +4,7 @@ import { storage } from './firbase'
 import axios from 'axios';
 import { Text,Button, Image, View, Platform,TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+// import * as  ImagePicker from 'react-native-image-picker'
 import Constants from 'expo-constants';
 
 const AddItem = (props) => {
@@ -13,84 +14,70 @@ const AddItem = (props) => {
    console.log(orderData)
 
 
-  //  const [image, setImage] = useState(null)
    
-  //  useEffect(() => {
-  //    (async () => {
-  //      if (Platform.OS !== 'web') {
-  //        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //        if (status !== 'granted') {
-  //          alert('Sorry, we need camera roll permissions to make this work!');
-  //        }
-  //      }
-  //    })();
-  //  }, []);
-
-
-
-  //  const pickImage = async () => {
-  //    let result = await ImagePicker.launchImageLibraryAsync({
-  //      mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //      allowsEditing: true,
-  //      aspect: [4, 3],
-  //      quality: 1,
-  //    });
-  //    console.log(result);
-  //    if (!result.cancelled) {
-  //     setImage(result.uri);
    
-  //    }
-  //  };
+ //declaring an image const
+const [image, setImage] = useState(null)
+  // choosing the image 
+const onChooseImagePress = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result)
+    //checking the uploaded image
+  if (!result.cancelled){
+    //setting the image name
+    var json = JSON.stringify(result.height)
+    setImage(result.uri)
+    //calling the image function 
+      uploadImage(result.uri , json)
+      .then (()=>{
 
-  //  const upload = ()=>{
-  //    orderData.image= image
-  //  }
+ console.log ('success');
+      })
+      .catch((error)=>{
+          console.log (error);
+      });
 
+  }
+}
+        //image save in firebase 
+      const uploadImage = async (uri,imageName)=>{
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const  ref = storage.ref().child('images/' + imageName).put(blob);
+      //retreive the image from the firebase
+      const saved =storage.ref("images").child(imageName).getDownloadURL().then(url => { 
+        
+        orderData.image = url 
+        console.log(url)
+                   })
+                
+       }
 
-//   const uploadToStorage = (image) => {
-//     getFileBlob(image, blob => {
-//       storage().ref().put(blob).then(function(snapshot) {
-//           console.log('Uploaded a blob or file!');
-//        })
-//    })
-// }
-
-
-   
-  //  const imageUpload  = async (e) => {
-    
-  //   const imageLink = storage.ref(`images/`).put(image)
-  //   imageLink.on(
-  //      "state_changed",
-  //      snapshot => {},
-  //      error => {
-  //        console.log(error)
-  //      },
-  //      () => {
-  //        storage
-  //        .ref(`images/`)
-  //        .child(image)
-  //        .getDownloadURL()
-  //        .then(url => {
-  //         orderData.image = url
-  //          console.log(url)
-  //        })
-  //      })
-  // }
 
 const addItems = () =>{
-    axios.post("http://192.168.1.36:5000/items",orderData).then( res => {
+    axios.post("http://127.0.0.1:5000/items",orderData).then( res => {
        
     })
     .catch((error) => {
         console.log(error);
     })
-   
+    props.navigation.navigate('items')
 }
 
 
     return (
         <View >
+
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      <Button title="Pick an image from camera roll" onPress={onChooseImagePress} />
+      
+         </View>
             <View>
             <Text>category:</Text>
             <TextInput
@@ -127,13 +114,7 @@ const addItems = () =>{
             onChangeText={text => setOrderData({...orderData ,price:text})}
             defaultValue={orderData.price}
              />
-              <Text>image:</Text>
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-     
-     
-     
-    </View>
-          
+             
             <Button
         title="add items"
         onPress={addItems}
