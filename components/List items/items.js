@@ -11,7 +11,7 @@ console.log(items)
 
 useEffect( () => {
     
-    axios.get('http://localhost:5000/ItemsList')   
+    axios.get('http://192.168.1.13:5000/ItemsList')   
     .then( res => {
         // console.log (res.data)
         setItems(res.data)
