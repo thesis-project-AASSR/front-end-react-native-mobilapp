@@ -12,11 +12,11 @@ const [savedUserData, setSavedUserData] = useState({ email: '', password: ''});
  
 //LOGIN button function
 const clickHandler = async (req) => {
-   axios.post('http://192.168.1.130:5000/signin', savedUserData) //connected to the server port
+   axios.post('http://192.168.1.94:5000/signin', savedUserData) //connected to the server port
    .then(async req =>{
     //  console.log(req.data)
      const token = req.data.token
-     const user_id = req.data.result[0].userID
+     const user_id = JSON.stringify(req.data.result[0].userID)
     try {
         //to save token of logged in user in the storage
      await AsyncStorage.setItem('token', token) 
@@ -28,6 +28,8 @@ const clickHandler = async (req) => {
     }
         //to get token of logged in user in the storage
     const trial = await AsyncStorage.getItem('user_id')
+    // const trial = await AsyncStorage.getItem('token')
+    console.log(trial)
     if (trial) {  //trial.length
         console.log('token is saved in storage, token length', trial.length)
     } else {
@@ -119,4 +121,3 @@ input: {
 })
 
 export default Login;
-

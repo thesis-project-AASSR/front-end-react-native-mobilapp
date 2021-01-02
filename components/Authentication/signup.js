@@ -1,22 +1,61 @@
 import React from 'react';
-import {StyleSheet, View, Text, ImageBackground, Button, TextInput} from 'react-native';
+import {StyleSheet, View, Text, ImageBackground, Button, TextInput, Image} from 'react-native';
 import {useState} from 'react';
-// import firebase from 'firebase';
-// import * as firebase from 'firebase';
-// import { storage } from './firbase';
+import * as firebase from 'firebase';
+import {launchImageLibraryAsync} from 'react-native-image-picker';
+import { storage} from '../List items/firbase';
+// import firebase from '../List items/firbase';
 // import StyledButton from '../StyledButton';
 // import styles from './style';
 import axios from 'axios';
+import * as ImagePicker from 'expo-image-picker';
+
 
 const Signup = (props) => {
 // // const {name,tagline,image} = props;
 const [userData, setUserData] = useState({  username: '', email: '', password: '', phoneNumber: '', location: '', image: null});
-// const [image, setUserData] = useState()
+//declaring an image const
+const [image, setImage] = useState(null)
 
+  // choosing the image 
+const onChooseImagePress = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    console.log(result)
+    //checking the uploaded image
+  if (!result.cancelled){
+    //setting the image name
+    var json = JSON.stringify(result.height)
+    setImage(result.uri)
+    //calling the image function 
+      uploadImage(result.uri , json)
+      .then (()=>{
+     console.log ('success');
+      })
+      .catch((error)=>{
+     console.log (error);
+      });
+  }
+}
+        //image save in firebase 
+      const uploadImage = async (uri,imageName)=>{
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const  ref = storage.ref().child('images/' + imageName).put(blob);
+      //retreive the image from the firebase
+      const saved =storage.ref("images").child(imageName).getDownloadURL().then(url => { 
+        userData.image = url 
+        console.log(url)
+                   })
+       }
 
 const clickHandler = () => {
    
-    axios.post('http://localhost:5000/signup', userData) //connected to the server port
+    axios.post('http://192.168.1.94:5000/signup', userData) //connected to the server port
     .then( req=> {
      console.log(req.data)
     //  localStorage.setItem('token', req.data.token)
@@ -31,39 +70,14 @@ const clickHandler = () => {
     })
  }
 
-
-///////////////////////////
-// function handleChangeImage(e){
-//     e.preventDefault();
-//       setUserImage( e.target.files[0])      
-//     }
-
-//     const imageUpload  = (e) => {
-//         const imageLink = storage.ref(`images/${image.name}`).put(image)
-//         imageLink.on(
-//            "state_changed",
-//            snapshot => {},
-//            error => {
-//              console.log(error)
-//            },
-//            () => {
-             
-//              storage
-//              .ref("images")
-//              .child(image.name)
-//              .getDownloadURL()
-//              .then(url => {
-     
-//               userData.image = url
-//                console.log(url)
-//              })
-//            })
-        
-//       }
 ////////////////////
     return (
         <View >
             
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      <Button title="Pick an image from camera roll" onPress={onChooseImagePress} />
+</View>
             <Text style = {styles.margin}>Sign up</Text>
             <View style = {styles.buttonContainer}>
             <Text>Username</Text>
@@ -91,12 +105,12 @@ const clickHandler = () => {
             placeholder='0123456789'
             onChangeText={(phoneNumber) =>  setUserData({...userData, phoneNumber: phoneNumber})}/>
 
-            <Text>Image</Text>
+            {/* <Text>Image</Text>
             <TextInput 
             style={styles.input}
             placeholder=''
             onChangeText={(image) =>  setUserData({...userData, image: image})}/>
-            {/* <Button title ="upload image" onPress= {imageUpload} /> */}
+            <Button title ="upload image" onPress= {imageUpload} /> */}
             <View style = {styles.buttonContainer}>
             <Button title = "signup" onPress =  {clickHandler}/>
                 </View>
