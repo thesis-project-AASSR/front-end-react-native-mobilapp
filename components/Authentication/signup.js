@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text, ImageBackground, Button, TextInput, Image} from 'react-native';
 import {useState} from 'react';
 import {launchImageLibraryAsync} from 'react-native-image-picker';
-import { storage} from '../List items/firbase';
+import { storage } from '../../Fire';
 // import firebase from '../List items/firbase';
 // import StyledButton from '../StyledButton';
 // import styles from './style';

@@ -1,6 +1,6 @@
 import React, { useState}from 'react';
-import {View, Text, Image, StyleSheet, Button} from 'react-native';
-import { storage } from '../List items/firbase'
+import {View, Text, Image, StyleSheet, Button,ScrollView } from 'react-native';
+import { storage } from '../../Fire'
 import * as ImagePicker from 'expo-image-picker';
 // import StyledButton from '../StyledButton';
 // import styles from './style';
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     },
   });
 return (
+  <ScrollView>
   <View>
     <Button onPress={() => props.navigation.openDrawer()} title="menu"/>
     <Text>update profile</Text>
@@ -78,6 +79,7 @@ return (
      <input  value = {editProfile.phoneNumber} onChange = {(e) => setEditProfile({ ...editProfile , phoneNumber : e.target.value})}/>
     <Button onPress= {onSubmit} title="submit"/>
  </View>
+ </ScrollView>
 )
 }
 export default EditProfile;
