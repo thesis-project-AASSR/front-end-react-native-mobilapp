@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { storage } from './firbase'
-
+import { storage } from '../../Fire'
+import RNPickerSelect from 'react-native-picker-select';
 import axios from 'axios';
 import { Text,Button, Image, View, Platform,TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 // import * as  ImagePicker from 'react-native-image-picker'
 import Constants from 'expo-constants';
-
+var CalPrice=0
 const AddItem = (props) => {
+  
     const [orderData, setOrderData] = useState({  category: '', quantity: '', weight: '', description: '', price:''
     ,image:null, location:localStorage.getItem('location'),
     status:"Pending", user_id:localStorage.getItem('user_id')})
-   console.log(orderData)
-
+  
+console.log(orderData)
 
    
    
@@ -26,9 +27,10 @@ const onChooseImagePress = async () => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result)
+   
     //checking the uploaded image
   if (!result.cancelled){
+    console.log(result)
     //setting the image name
     var json = JSON.stringify(result.height)
     setImage(result.uri)
@@ -53,22 +55,29 @@ const onChooseImagePress = async () => {
       const saved =storage.ref("images").child(imageName).getDownloadURL().then(url => { 
         
         orderData.image = url 
-        console.log(url)
+       
                    })
                 
        }
 
 
-const addItems = async () =>{
-    axios.post("http://192.168.1.14:5000/items",orderData).then( res => {
-       
+const addItems = () =>{
+    axios.post("http://192.168.1.36:5000/items",orderData).then( res => {
+      
     })
     .catch((error) => {
         console.log(error);
     })
-    await props.navigation.navigate("All Items")
+
+
+//  props.navigation.navigate("All Items")
 }
 
+const prices = {Iron:0.25,wood:0.20,glass:0.15,plastic:0.10}
+
+var kind= orderData.category
+const calculatePrice = prices[kind]
+CalPrice= calculatePrice *  orderData.quantity * orderData.weight
 
     return (
         <View >
@@ -79,44 +88,47 @@ const addItems = async () =>{
       
          </View>
             <View>
-            <Text>category:</Text>
-            <TextInput
-            style={{height: 40}}
-            placeholder="Type here your category!"
-            onChangeText={text => setOrderData({...orderData ,category:text})}
-            defaultValue={orderData.category}
-             />
+            <RNPickerSelect
+            onValueChange={(value) => setOrderData({...orderData ,category:value})}
+            items={[
+                { label: "Iron", value: "Iron" },
+                { label: "wood", value: "wood" },
+                { label: "glass", value:"glass" },
+                { label: "plastic", value: "plastic" },
+            ]}
+        />
+            
              <Text>quantity:</Text>
             <TextInput
             style={{height: 40}}
             placeholder="Type here the quantity!"
-            onChangeText={text => setOrderData({...orderData ,quantity:text})}
-            defaultValue={orderData.quantity}
+            onChangeText={text => setOrderData({...orderData ,quantity:text, price:CalPrice})}
+        
              />
              <Text>weight:</Text>
             <TextInput
             style={{height: 40}}
             placeholder="Type here the weight!"
-            onChangeText={text => setOrderData({...orderData ,weight:text})}
-            defaultValue={orderData.weight}
+            onChangeText={text => setOrderData({...orderData ,weight:text, price:CalPrice})}
+           
              />
              <Text>description:</Text>
             <TextInput
             style={{height: 40}}
             placeholder="Type here the description!"
             onChangeText={text => setOrderData({...orderData ,description:text})}
-            defaultValue={orderData.description}
+           
              />
              <Text>price:</Text>
             <TextInput
             style={{height: 40}}
-            placeholder="Type here the price!"
-            onChangeText={text => setOrderData({...orderData ,price:text})}
-            defaultValue={orderData.price}
+            placeholder={CalPrice}
+         
+           
              />
               <Button
         title="add location"
-        onPress={async () => await props.navigation.navigate("MapScreen")}
+        onPress={ () => props.navigation.navigate("MapScreen")}
       />
             <Button
         title="add items"

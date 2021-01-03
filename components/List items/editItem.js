@@ -1,13 +1,13 @@
 import React, { useEffect ,useState } from 'react';
 import {View, Text, ImageBackground,Image ,TextInput,Button} from 'react-native';
-import { storage } from './firbase'
+import { storage } from '../../Fire'
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 // import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const EditItems = (props) => {
-    console.log(props)
+
 
     // const Stack = createStackNavigator();
    const [orderData, setOrderData] = useState({  category: props.route.params.category, 
@@ -17,7 +17,7 @@ const EditItems = (props) => {
     price:props.route.params.price
 ,image:props.route.params.image, location:props.route.params.location,
 status:props.route.params.status, user_id:props.route.params.user_id})
-console.log(orderData)
+
 
 
    const [image, setImage] = useState()
@@ -28,7 +28,7 @@ console.log(orderData)
          aspect: [4, 3],
          quality: 1,
        });
-       console.log(result)
+       
      if (!result.cancelled){
        var json = JSON.stringify(result.height)
        setImage(result.uri)
@@ -50,21 +50,21 @@ console.log(orderData)
          const saved =storage.ref("images").child(imageName).getDownloadURL().then(url => { 
            
           setOrderData({...orderData ,image:url})
-           console.log(url)
+          
                       })
                    
           }
         
         
 const Edit = () =>{
-    axios.put('http://192.168.1.14:5000/items/'+props.route.params.itemID,orderData).then(req => {
-       console.log(req)
+    axios.put('http://192.168.1.36:5000/items/'+props.route.params.itemID,orderData).then(req => {
+      
        
     })
     .catch((error) => {
         console.log(error);
     })
-    console.log(orderData)
+  
    
     props.navigation.navigate("All Items") }
 

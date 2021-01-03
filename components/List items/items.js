@@ -3,40 +3,63 @@ import {View, Text, ImageBackground,Image,StyleSheet,Button, useWindowDimensions
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import  axios from 'axios';
+import  AsyncStorage  from '@react-native-community/async-storage';
+
 const Items = (props) => {
-  console.log(props)
-// const {name,tagline,image} = props;
+
+
 const [items, setItems] = useState('');
-localStorage.setItem('userid',11)
+const [user, setUser] = useState('')
+
 // localStorage.setItem('location','amman')
 
 const Delete = (ID) => {
   
-  axios.delete("http://192.168.1.14:5000/delete/"+ID).then( res => {
-   console.log(res.data) 
+  axios.delete("http://192.168.1.36:5000/delete/"+ID).then( res => {
+   
    })
   .catch((error) => {
     console.log(error);
 })
-// window.location.reload(false);
+
 }
 
 
 useEffect(  () => {
     
-     axios.get( 'http://192.168.1.14:5000/ItemsList')   
+     axios.get( 'http://192.168.1.36:5000/ItemsList')   
     .then( res => {
-        // console.log (res.data)
+        
         setItems(res.data)
     })
     .catch((error) => {
         console.log(error);
     })
+
+  },[items])
+
+
+
+
+
+  useEffect( async () => {
+    try {
+      const value = await AsyncStorage.getItem('user_id');
+      setUser(value)
+      if (value !== null) {
+        // We have data!!
+        
+      }
+   
+    } catch (error) {
+      // Error retrieving data
+    }
+   
+ },[])
+
+
+
   
-  }, [items]);
-
-
-
 
   const styles = StyleSheet.create({
     container: {
@@ -53,9 +76,11 @@ useEffect(  () => {
   });
     return (
         <View>
-             
+          
             
-        {Object.entries(items).map(([key,v])=>{
+             {Object.entries(items).filter(([key,y]) => 
+    y.user_id == user ).map(([key,v])=>{
+
             return <View key={key}>
                    <Text>
                   <Image
@@ -69,12 +94,10 @@ useEffect(  () => {
             <Text> weight: {v.weight}</Text>
             <Text> description: {v.description}</Text>
             <Text> location: {v.location}</Text>
+            <Text> location: {v.user_id}</Text>
            
            
-            <Button
-        title="Go to add items"
-        onPress={() => props.navigation.navigate("Add new item")}
-      />
+          
       <Button
         title="Edit"
         onPress={() => props.navigation.navigate("Edit", {itemID:v.itemID ,image :v.image,category :v.category,
@@ -92,10 +115,15 @@ useEffect(  () => {
               
 
             </Text>
-          
+           
             
             </View>
         })}
+
+<Button
+        title="Go to add items"
+        onPress={() => props.navigation.navigate("Add new item")}
+      />
         </View>
     )
 }

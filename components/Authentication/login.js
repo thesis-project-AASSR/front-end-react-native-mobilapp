@@ -5,14 +5,12 @@ import  AsyncStorage  from '@react-native-community/async-storage';
 // import styles from './style';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-
 const Login = (props) => {
 // const {name,tagline,image} = props;
 const [savedUserData, setSavedUserData] = useState({ email: '', password: ''});
- 
 //LOGIN button function
 const clickHandler = async (req) => {
-   axios.post('http://192.168.1.14:5000/signin', savedUserData) //connected to the server port
+   axios.post('http://192.168.1.94:5000/signin', savedUserData) //connected to the server port
    .then(async req =>{
     //  console.log(req.data)
      const token = req.data.token
@@ -21,6 +19,7 @@ const clickHandler = async (req) => {
         //to save token of logged in user in the storage
      await AsyncStorage.setItem('token', token) 
      await AsyncStorage.setItem('user_id', user_id)  
+     props.navigation.navigate('Profile')
      console.log('saved', token)
      }
     catch (e){
@@ -42,14 +41,12 @@ const clickHandler = async (req) => {
    .catch((error) => {
        console.log("error", error)
    })
-   props.navigation.navigate('Profile')
 }
 //this function is only for checking if storage is filled with token of it is empty
 //it is called in check button inside render
 const checkIfLoggedIn = async () => {
 try {
      const trial = await AsyncStorage.getItem('token')
-     
     if (trial) {
         console.log('loggedin', trial)
     } else {
@@ -58,7 +55,6 @@ try {
 }catch (e){
 console.log(e)
 }
- 
   }; 
 //to logout and clear storage for token
   const logout = async () => {
@@ -83,7 +79,6 @@ console.log(e)
             placeholder='example@xxxmail.com'
             // onChangeText={(val) => setSavedUserData(val)}
             onChangeText={(email) => setSavedUserData({...savedUserData, email: email})}/>
-
             <Text>Enter your Password</Text>
             <TextInput 
             // keyboardType='default'
@@ -97,7 +92,6 @@ console.log(e)
             </View>
                 )
 }
-
 const styles = StyleSheet.create({
 containers: {
     flex: 1,
@@ -119,5 +113,4 @@ input: {
     width: 200,
 }
 })
-
 export default Login;

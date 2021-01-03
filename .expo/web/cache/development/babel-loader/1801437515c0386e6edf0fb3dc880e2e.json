@@ -1,0 +1,1 @@
+{"ast":null,"code":"","map":{"version":3,"sources":[],"names":[],"mappings":"","sourcesContent":["// // import firebase from \"react-native-firebase\";\r\n// import firebase from \"firebase/app\";\r\n// import \"firebase/storage\";\r\n//   // Your web app's Firebase configuration\r\n \r\n// export { storage, firebase as default};"]},"metadata":{},"sourceType":"script"}

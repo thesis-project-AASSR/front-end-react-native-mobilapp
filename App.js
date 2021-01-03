@@ -39,58 +39,9 @@ function HomeScreen({ navigation }) {
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-  // const [token, setToken] = useState('');
-// useEffect ( () => {
-//    clickHandler()
-// }, [])
-// const saveData = async () => {
-//   try {
-//     await AsyncStorage.setItem('token', 1)
-//     alert('Data successfully saved')
-//   } catch (e) {
-//     alert('Failed to save the data to the storage')
-//   }
-// }
-// const [savedUserData, setSavedUserData] = useState({ email: 'areen@hotmail.com', password: 'areenazzam'});
-// //LOGIN button function
-// const clickHandler = async (req) => {
-//    axios.post('http://192.168.1.13:5000/signin', savedUserData) //connected to the server port
-//    .then(async req =>{
-//     //  console.log(req.data)
-//      const token = req.data.token
-//      const user_id = JSON.stringify(req.data.result[0].userID)
-//      console.log(user_id)
-//      console.log(token)
-//     try {
-//         //to save token of logged in user in the storage
-//      await AsyncStorage.setItem('token', token) 
-//      await AsyncStorage.setItem('user_id', user_id)  
-//      console.log('saved', token)
-//      }
-//     catch (e){
-//     console.log(e)
-//     }
-//         //to get token of logged in user in the storage
-//     const trial = await AsyncStorage.getItem('user_id')
-//     // const trial = await AsyncStorage.getItem('token')
-//     console.log(trial)
-//     if (trial) {  //trial.length
-//         console.log('token is saved in storage, token length', trial.length)
-//     } else {
-//        console.log('nooooo token in storage')
-//     }
-//     // setSavedUserData(savedUserData)
-//     console.log(savedUserData)
-//     console.log("success")
-//    })
-//    .catch((error) => {
-//        console.log("error", error)
-//    })
-// }
+ 
   return (
-    // <View>
-    // <Button onPress ={click}/>
-    // </View>
+    
     <NavigationContainer>
     <Drawer.Navigator initialRouteName="Home"  >
       <Drawer.Screen name="Home" component={HomeScreen}  />
@@ -111,8 +62,7 @@ export default function App() {
       
      
      
-      {/* ) */}
-      {/* } */}
+    
     </Drawer.Navigator>
   </NavigationContainer>
   );
