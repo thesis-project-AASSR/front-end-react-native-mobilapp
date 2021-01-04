@@ -4,32 +4,74 @@ import { StyleSheet, Text, View, Platform, Button, Image, TextInput } from 'reac
 import Photo from './components/Authentication/imagePicker';
 import Login from './components/Authentication/login';
 import Signup from './components/Authentication/signup';
+import Notification from './components/notifications/notifications';
 import * as ImagePicker from 'expo-image-picker';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Constants from 'expo-constants';
+
+
+import {AsyncStorage} from '@react-native-community/async-storage'
+import profile from './components/Profile/profile';
+import EditProfile from './components/Profile/editProfile';
+import items from './components/List items/items';
+import addItems from './components/List items/addItem';
+import signup from './components/Authentication/signup';
+import login from './components/Authentication/login';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
-import firebase from './components/List items/firbase';
-import { storage } from './components/List items/firbase';
+import Edit from './components/List items/editItem'
+import LocationSearchModal from './components/map'
+import main from './components/chat/Main'
+import chat from './components/chat/Chat'
+// import { StatusBar } from 'expo-status-bar';
 
-export default function App() {
-
-  // if (!firebase.apps.length) {firebase.initializeApp(firebase.firebaseConfig)}
+function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      {/* <Text>hello world!</Text> */}
-      {/* <Photo/> */}
-      {/* <Login /> */}
-     <Signup/>
-      <StatusBar style="auto" />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      {/* should be in all the components */}
+      <Button onPress={() => navigation.openDrawer()} title="menu"/>
+      <Text style={styles.container}>Dawerha</Text>
+      <Button onPress={() => navigation.navigate('Sign Up')} title="Sign Up"/>
+      <Button onPress={() => navigation.navigate('Sign In')} title="Sign In"/>
     </View>
   );
 }
+const Drawer = createDrawerNavigator();
 
+export default function App() {
+ 
+  return (
+    
+    <NavigationContainer>
+    <Drawer.Navigator initialRouteName="Home"  >
+      <Drawer.Screen name="Home" component={HomeScreen}  />
+      {/* {(typeof(getValue) == "number") ? ( */}
+      <Drawer.Screen name="Profile" component={profile}/>
+      <Drawer.Screen name="Add new item" component={addItems}/> 
+      <Drawer.Screen name="All Items" component={items}/> 
+      <Drawer.Screen name="Edit" component={Edit} />
+      <Drawer.Screen name="MapScreen" component={LocationSearchModal} />
+      <Drawer.Screen name="Main" component={main} />
+      <Drawer.Screen name="Chat" component={chat} />
+      {/* ) */}
+      {/* : ( */}
+      <Drawer.Screen name="Sign Up" component={signup} />
+      <Drawer.Screen name="Sign In" component={login} />
+       <Drawer.Screen name="update profile" component={EditProfile}/> 
+      
+      
+     
+     
+    
+    </Drawer.Navigator>
+  </NavigationContainer>
+  );
+}
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 0,
+    fontSize: 50,
+    color: 'white',
+    backgroundColor: 'green'
   },
 });

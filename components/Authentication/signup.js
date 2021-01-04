@@ -1,22 +1,19 @@
 import React from 'react';
 import {StyleSheet, View, Text, ImageBackground, Button, TextInput, Image} from 'react-native';
 import {useState} from 'react';
-import * as firebase from 'firebase';
 import {launchImageLibraryAsync} from 'react-native-image-picker';
-import { storage} from '../List items/firbase';
+import { storage } from '../../Fire';
 // import firebase from '../List items/firbase';
 // import StyledButton from '../StyledButton';
 // import styles from './style';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-
-
 const Signup = (props) => {
 // // const {name,tagline,image} = props;
 const [userData, setUserData] = useState({  username: '', email: '', password: '', phoneNumber: '', location: '', image: null});
 //declaring an image const
 const [image, setImage] = useState(null)
-
+////////////////
   // choosing the image 
 const onChooseImagePress = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -52,9 +49,7 @@ const onChooseImagePress = async () => {
         console.log(url)
                    })
        }
-
 const clickHandler = () => {
-   
     axios.post('http://192.168.1.94:5000/signup', userData) //connected to the server port
     .then( req=> {
      console.log(req.data)
@@ -68,12 +63,11 @@ const clickHandler = () => {
         console.log(error)
         console.log("error")
     })
+    props.navigation.navigate('Sign In')
  }
-
 ////////////////////
     return (
         <View >
-            
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       <Button title="Pick an image from camera roll" onPress={onChooseImagePress} />
@@ -85,26 +79,22 @@ const clickHandler = () => {
             style={styles.input}
             placeholder=''
             onChangeText={(username) => setUserData({...userData, username: username})}/>
-
             <Text>Email</Text>
             <TextInput 
             style={styles.input}
             placeholder='example@xxxmail.com'
             onChangeText={(email) =>  setUserData({...userData, email: email})}/>
-
             <Text>Password</Text>
             <TextInput 
             // keyboardType='default'
             style={styles.input}
             placeholder='e.g .!@#123Aa'
             onChangeText={(password) =>  setUserData({...userData, password: password})}/>
-
             <Text>Phone Number</Text>
             <TextInput 
             style={styles.input}
             placeholder='0123456789'
             onChangeText={(phoneNumber) =>  setUserData({...userData, phoneNumber: phoneNumber})}/>
-
             {/* <Text>Image</Text>
             <TextInput 
             style={styles.input}
@@ -115,11 +105,9 @@ const clickHandler = () => {
             <Button title = "signup" onPress =  {clickHandler}/>
                 </View>
                 </View>
-
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     containers: {
         flex: 1,
@@ -141,5 +129,4 @@ const styles = StyleSheet.create({
         width: 200,
     }
     })
-
 export default Signup;
