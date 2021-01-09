@@ -1,4 +1,3 @@
-# front-end-react-native-mobilapp
 # Mobile Application 
 
 # project Name :
